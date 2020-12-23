@@ -4,7 +4,7 @@
       "type": "Feature",
       "properties": {
         "ID": "1",
-        "Medicine A": "Y"
+        "MedicineA": "Y"
       },
       "geometry": {
         "coordinates": [-87.637596, 41.940403],
@@ -15,7 +15,7 @@
       "type": "Feature",
       "properties": {
         "ID": "2",
-        "Medicine A": "N"
+        "MedicineA": "N"
       },
       "geometry": {
         "coordinates": [-87.603735, 41.829985],
@@ -26,7 +26,7 @@
       "type": "Feature",
       "properties": {
         "ID": "3",
-        "Medicine A": "Y"
+        "MedicineA": "Y"
       },
       "geometry": {
         "coordinates": [-87.769775, 41.873683],
