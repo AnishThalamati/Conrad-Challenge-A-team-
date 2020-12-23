@@ -45,7 +45,7 @@
 
   var popup = new mapboxgl.Popup({ offset: [0, -15] })
     .setLngLat(feature.geometry.coordinates)
-    .setHTML('</h3><p>' + 'ID: ' + feature.properties.ID + ' ' '</p>') // Displays ID when hovered over
+    .setHTML('<h3>' + 'ID: ' + feature.properties.ID + '</h3><p>' + 'Medicine A' +  feature.properties.MedicineA + '</p>') // Displays ID and if dosage requirement has been fuffilled when hovered over
     .addTo(map);
 });
  
