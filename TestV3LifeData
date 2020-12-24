@@ -1,35 +1,40 @@
-// Divided for use on JSfiddle 
-//html 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Add live realtime data</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css" rel="stylesheet" />
+<style>
+  body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
 <div id="map"></div>
-
-//CSS
-body { margin: 0; padding: 0; }
-	#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-  
-//JS 
-
-	mapboxgl.accessToken = 'pk.eyJ1IjoiYW5pc2h0aGFsYW1hdGkiLCJhIjoiY2tqMGppdWV1MGJybTJ4bGphdmM5c2RtMyJ9.ppWpEl7sE8gjJdgsTd0asw';
+ 
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYW5pc2h0aGFsYW1hdGkiLCJhIjoiY2tqMGppdWV1MGJybTJ4bGphdmM5c2RtMyJ9.ppWpEl7sE8gjJdgsTd0asw';
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/anishthalamati/ckj0x4br310oc1arqbq97vtso',
         zoom: 14.69
     });
-  ,
-		var xc =  47.687;
-		var yc = -92.316;
+    var xc = 45.25155555988636;
+    var yc = 40.899096530713415;
     var url = 'https://wanderdrone.appspot.com/';
     map.on('load', function () {
         window.setInterval(function () {
                     // retrieve the JSON from the response
-		    var i = 1;
                     var coordinates ='[' + xc + ','+ yc + ']}';
-		    if (i%3 != 0) {
-		    xc = xc + 0.1;
-		    }
-		    if (i%3 ==0) {
-		    yc = yc + 0.1;
-		    }
-		    i = i+1 
+               
+                      xc = xc + 0.1
+                      yc = yc + 0.1 
+                    
+                   
+                    
+                    yc = yc + 0.1;
                     var data = '{"geometry": {"type": "Point", "coordinates":' + coordinates + ', "type": "Feature", "properties": {}}'
                     console.log(data)
                     var json = JSON.parse(data);
@@ -42,8 +47,8 @@ body { margin: 0; padding: 0; }
                         center: json.geometry.coordinates,
                         speed: 0.5
                     });
-                
-            
+
+
         }, 2000);
 
         map.addSource('drone', { type: 'geojson', data: url });
@@ -56,3 +61,7 @@ body { margin: 0; padding: 0; }
             }
         });
     });
+</script>
+ 
+</body>
+</html>
