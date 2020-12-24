@@ -1,0 +1,51 @@
+// Divided for use on JSfiddle 
+//html 
+<div id="map"></div>
+
+//CSS
+body { margin: 0; padding: 0; }
+	#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+  
+//JS 
+
+	mapboxgl.accessToken = 'pk.eyJ1IjoiYW5pc2h0aGFsYW1hdGkiLCJhIjoiY2tqMGppdWV1MGJybTJ4bGphdmM5c2RtMyJ9.ppWpEl7sE8gjJdgsTd0asw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/anishthalamati/ckj0x4br310oc1arqbq97vtso',
+        zoom: 0
+    });
+		var xc = 45.25155555988636;
+		var yc = 40.899096530713415;
+    var url = 'https://wanderdrone.appspot.com/';
+    map.on('load', function () {
+        window.setInterval(function () {
+                    // retrieve the JSON from the response
+                    var coordinates ='[' + xc + ','+ yc + ']}';
+                    xc = xc + 0.1;
+                    yc = yc + 0.1;
+                    var data = '{"geometry": {"type": "Point", "coordinates":' + coordinates + ', "type": "Feature", "properties": {}}'
+                    console.log(data)
+                    var json = JSON.parse(data);
+
+                    // update the drone symbol's location on the map
+                    map.getSource('drone').setData(json);
+
+                    // fly the map to the drone's current location
+                    map.flyTo({
+                        center: json.geometry.coordinates,
+                        speed: 0.5
+                    });
+                
+            
+        }, 2000);
+
+        map.addSource('drone', { type: 'geojson', data: url });
+        map.addLayer({
+            'id': 'drone',
+            'type': 'symbol',
+            'source': 'drone',
+            'layout': {
+                'icon-image': 'zoo-15'
+            }
+        });
+    });
