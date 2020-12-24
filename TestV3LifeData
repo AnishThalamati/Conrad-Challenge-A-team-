@@ -21,7 +21,7 @@ body { margin: 0; padding: 0; }
     map.on('load', function () {
         window.setInterval(function () {
                     // retrieve the JSON from the response
-		    var i = 0;
+		    var i = 1;
                     var coordinates ='[' + xc + ','+ yc + ']}';
 		    if (i%3 != 0) {
 		    xc = xc + 0.1;
