@@ -1,0 +1,89 @@
+//Livedata file except using two cows, one dynamic and static  
+
+//html 
+<div id="map"></div>
+//css 
+ body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+//JS 
+ mapboxgl.accessToken = 'pk.eyJ1IjoiYW5pc2h0aGFsYW1hdGkiLCJhIjoiY2tqMGppdWV1MGJybTJ4bGphdmM5c2RtMyJ9.ppWpEl7sE8gjJdgsTd0asw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/anishthalamati/ckj0x4br310oc1arqbq97vtso',
+        zoom: 14.69
+    });
+    var xc = -87.637596;
+    var yc = 41.940403;
+    var basedataset =  {
+    "type": "FeatureCollection",
+    "features": [ 
+    {"type": "Feature",
+      "properties": {
+        "ID": "1",
+        "MedicineA": "Y"
+      },
+      "geometry": {
+        "coordinates": [-87.637596,41.940403],
+        "type": "Point"
+      }
+      },
+      {"type": "Feature",
+      	"properties": {
+        	"ID": "2",
+          "MedicineA": "N"
+        },
+        "geometry": {
+         "coordinates": [-87.837596,41.940403],
+         "type": "Point" 
+         }
+      }
+      ]
+      }
+
+ map.on('load', function () {
+ 				
+        window.setInterval(function () {
+       	 	var coordinates ='[' + xc + ','+ yc + ']}';
+        	xc = xc + 0.1 
+
+        	var newset = {
+    "type": "FeatureCollection",
+    "features": [ 
+    {"type": "Feature",
+      "properties": {
+        "ID": "1",
+        "MedicineA": "Y"
+      },
+      "geometry": {
+        "coordinates": coordinates,
+        "type": "Point"
+      }
+      },
+      {"type": "Feature",
+      	"properties": {
+        	"ID": "2",
+          "MedicineA": "N"
+        },
+        "geometry": {
+         "coordinates": [-87.837596,41.940403],
+         "type": "Point" 
+         }
+      }
+      ]
+      }
+console.log(newset)
+
+
+
+        }, 5000);
+
+        map.addSource('drone', { type: 'geojson', data: basedataset });
+        map.addLayer({
+            'id': 'drone',
+            'type': 'symbol',
+            'source': 'drone',
+            'layout': {
+                'icon-image': 'zoo-15'
+            }
+        });
+    });
