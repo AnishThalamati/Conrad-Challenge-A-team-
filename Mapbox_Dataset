@@ -32,7 +32,40 @@
         "coordinates": [-87.769775, 41.873683],
         "type": "Point"
       }
-    }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "4",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [-87.803735, 41.899985],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "5",
+        "MedicineA": "Y"
+      },
+      "geometry": {
+        "coordinates": [-87.903735, 41.929985],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "6",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [-87.923735, 41.629985],
+        "type": "Point"
+      }
+    },
   ],
   "type": "FeatureCollection"
 }
