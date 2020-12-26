@@ -14,6 +14,8 @@
     });
     var xc = -87.637596;
     var yc = 41.940403;
+    var xc2 = -87.837596;
+    var yc2 = 41.940403;
     var basedataset =  {
     "type": "FeatureCollection",
     "features": [ 
@@ -44,7 +46,9 @@
  				
         window.setInterval(function () {
        	 	var coordinates ='[' + xc + ','+ yc + ']}';
+          var coordinates2 ='[' + xc2 + ','+ yc2 + ']}';
         	xc = xc + 0.1 
+         xc2 = xc2 + 0.1 
 
         	var newset = {
     "type": "FeatureCollection",
@@ -65,7 +69,7 @@
           "MedicineA": "N"
         },
         "geometry": {
-         "coordinates": [-87.837596,41.940403],
+         "coordinates": coordinates2,
          "type": "Point" 
          }
       }
