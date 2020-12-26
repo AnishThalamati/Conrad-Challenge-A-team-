@@ -41,12 +41,13 @@
       }
       ]
       }
+      var dataset1 = {"geometry": {"type": "Point", "coordinates": [80.22125848646738, 21.397998608210607]}, "type": "Feature", "properties": {}}
 
  map.on('load', function () {
  				
         window.setInterval(function () {
-       	 	var coordinates ='[' + xc + ','+ yc + ']}';
-          var coordinates2 ='[' + xc2 + ','+ yc2 + ']}';
+       	 	var coordinates = [  xc , yc  ];
+          var coordinates2 = [  xc2 , yc2 ];
         	xc = xc + 0.1 
          xc2 = xc2 + 0.1 
 
@@ -75,13 +76,19 @@
       }
       ]
       }
+// test 
 console.log(newset)
+
+map.getSource('drone').setData(newset);
+
+
+
 
 
 
         }, 5000);
 
-        map.addSource('drone', { type: 'geojson', data: basedataset });
+        map.addSource('drone', { type: 'geojson', data: basedataset});
         map.addLayer({
             'id': 'drone',
             'type': 'symbol',
