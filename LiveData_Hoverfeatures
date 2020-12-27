@@ -1,0 +1,130 @@
+//HTML
+<div id="map"></div>
+//CSS
+body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+//JS 
+ mapboxgl.accessToken = 'pk.eyJ1IjoiYW5pc2h0aGFsYW1hdGkiLCJhIjoiY2tqMGppdWV1MGJybTJ4bGphdmM5c2RtMyJ9.ppWpEl7sE8gjJdgsTd0asw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/anishthalamati/ckj0x4br310oc1arqbq97vtso',
+        zoom: 14.69, 
+        center: [-87.6375, 41.9409]
+    });
+    var xc = -87.637596;
+    var yc = 41.940403;
+    var xc2 = -87.837596;
+    var yc2 = 41.940403;
+    var basedataset =  {
+    "type": "FeatureCollection",
+    "features": [ 
+    {"type": "Feature",
+      "properties": {
+        "ID": "1",
+        "MedicineA": "Y"
+      },
+      "geometry": {
+        "coordinates": [-87.637596,41.940403],
+        "type": "Point"
+      }
+      },
+      {"type": "Feature",
+      	"properties": {
+        	"ID": "2",
+          "MedicineA": "N",
+          'marker-color': '#3bb2d0'
+          
+        },
+        "geometry": {
+         "coordinates": [-87.837596,41.940403],
+         "type": "Point" 
+         }
+      }
+      ]
+      }
+      var dataset1 = {"geometry": {"type": "Point", "coordinates": [80.22125848646738, 21.397998608210607]}, "type": "Feature", "properties": {}}
+var i = 0; 
+ map.on('load', function () {
+ 				
+        window.setInterval(function () {
+       	 	var coordinates = [  xc , yc  ];
+          var coordinates2 = [  xc2 , yc2 ];
+          
+     if (i%2 == 0) {
+        xc = xc + 0.1 
+        yc2 = yc2 + 0.1
+        }else {
+        xc2 = xc2 + 0.1
+        yc = yc + 0.1 
+        }
+ 
+        	var newset = {
+    "type": "FeatureCollection",
+    "features": [ 
+    {"type": "Feature",
+      "properties": {
+        "ID": "1",
+        "MedicineA": "Yes"
+      },
+      "geometry": {
+        "coordinates": coordinates,
+        "type": "Point"
+      }
+      },
+      {"type": "Feature",
+      	"properties": {
+        	"ID": "2",
+          "MedicineA": "No"
+        },
+        "geometry": {
+         "coordinates": coordinates2,
+         "type": "Point" 
+         }
+      }
+      ]
+      }
+// test 
+console.log(newset)
+
+map.getSource('drone').setData(newset);
+
+
+
+
+
+
+
+
+
+
+
+        }, 2000);
+
+        map.addSource('drone', { type: 'geojson', data: basedataset});
+        map.addLayer({
+            'id': 'drone',
+            'type': 'symbol',
+            'source': 'drone',
+            'layout': {
+                'icon-image': 'zoo-15'
+            }
+        });
+    });
+        map.on('click', function(e) {
+  
+  
+  var features = map.queryRenderedFeatures(e.point, {
+    layers: ['drone'] // replace this with the name of the layer
+  });
+
+  if (!features.length) {
+    return;
+  }
+
+  var feature = features[0];
+
+  var popup = new mapboxgl.Popup({ offset: [0, -15] })
+    .setLngLat(feature.geometry.coordinates)
+    .setHTML('<h3>' + 'ID: ' + feature.properties.ID + '</h3><p>' + 'Dosage: ' + feature.properties.MedicineA + '</p>') // Displays ID and if dosage requirement has been fuffilled when hovered over
+    .addTo(map);
+});
