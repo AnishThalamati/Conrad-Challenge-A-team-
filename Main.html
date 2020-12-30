@@ -1,54 +1,196 @@
-#Main file for HTML 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8' />
-    <title>Points on a map</title>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-      }
+//HTML 
+<div id="map"></div>
 
-      #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <div id='map'></div>
-    <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYW5pc2h0aGFsYW1hdGkiLCJhIjoiY2tqMGppdWV1MGJybTJ4bGphdmM5c2RtMyJ9.ppWpEl7sE8gjJdgsTd0asw'; // replace this with your access token
+<div class='LivestockInfo'>
+  <div><strong>ID:</strong> <span id='ID'></span></div>
+  <div><strong>Dosage:</strong> <span id='Dosage'></span></div>
+  <div class = 'button'>
+  <button  id="Adminster" onclick="ShowDosage()">Adminster Dosage</button>
+  </div>
+</div>
+
+//CSS
+body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+  
+  .button {
+  border: none;
+  color: white;
+  font-size: 14px;
+}
+
+
+.LivestockInfo {
+  position: absolute;
+  font-family: sans-serif;
+  margin-top: 5px;
+  margin-left: 5px;
+  padding: 5px;
+  width: 30%;
+  border: 2px solid black;
+  font-size: 14px;
+  color: #222;
+  background-color: #fff;
+  border-radius: 3px;
+} 
+
+
+
+//JS 
+ mapboxgl.accessToken = 'pk.eyJ1IjoiYW5pc2h0aGFsYW1hdGkiLCJhIjoiY2tqMGppdWV1MGJybTJ4bGphdmM5c2RtMyJ9.ppWpEl7sE8gjJdgsTd0asw';
     var map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/anishthalamati/ckj0ndvq02sm919o1k5vygjnf', // replace this with your style URL
-      center: [-87.661557, 41.893748],
-      zoom: 10.7
+        container: 'map',
+        style: 'mapbox://styles/anishthalamati/ckj0x4br310oc1arqbq97vtso',
+        zoom: 8, 
+        center: [-87.6375, 41.9409]
     });
-  // Popup Menu 
-    map.on('click', function(e) {
-  var features = map.queryRenderedFeatures(e.point, {
-    layers: ['testdataset3v2'] // replace this with the name of the layer
-  });
+     var IDDisplay = document.getElementById('ID');
+    var DosageDisplay = document.getElementById('Dosage');
+    var xc = -87.637596;
+    var yc = 41.940403;
+    var xc2 = -87.837596;
+    var yc2 = 41.940403;
+    var basedataset =  {
+    "type": "FeatureCollection",
+    "features": [ 
+    {"type": "Feature",
+      "properties": {
+        "ID": "1",
+        "MedicineA": "Yes"
+      },
+      "geometry": {
+        "coordinates": [-87.637596,41.940403],
+        "type": "Point"
+      }
+      },
+      {"type": "Feature",
+      	"properties": {
+        	"ID": "2",
+          "MedicineA": "No",
+          'marker-color': '#3bb2d0'
+          
+        },
+        "geometry": {
+         "coordinates": [-87.837596,41.940403],
+         "type": "Point" 
+         }
+      }
+      ]
+      }
+      var dataset1 = {"geometry": {"type": "Point", "coordinates": [80.22125848646738, 21.397998608210607]}, "type": "Feature", "properties": {}}
+var i = 0; 
+var N1 = "No";
+var N2 = "No";
+        
+    
 
-  if (!features.length) {
-    return;
-  }
-
-  var feature = features[0];
-
-  var popup = new mapboxgl.Popup({ offset: [0, -15] })
-    .setLngLat(feature.geometry.coordinates)
-    .setHTML('<h3>' + 'ID: ' + feature.properties.ID + '</h3><p>' + 'Medicine A' +  feature.properties.MedicineA + '</p>') // Displays ID and if dosage requirement has been fuffilled when hovered over
-    .addTo(map);
-});
+ map.on('load', function () {
+ 				
+        window.setInterval(function () {
+        
  
-    </script>
-  </body>
-</html>
+        
+        
+        
+       	 	var coordinates = [  xc , yc  ];
+          var coordinates2 = [  xc2 , yc2 ];
+          
+     if (i%2 == 0) {
+        xc = xc + 0.01 
+        yc2 = yc2 + 0.01
+        }else {
+        xc2 = xc2 + 0.01
+        yc = yc + 0.01 
+        }
+        
+        var firstsubset = {
+        "ID": "1",
+        "MedicineA": N1
+      }
+        var secondsubset =
+        {
+        	"ID": "2",
+          "MedicineA": N2
+        }
+ 
+        	var newset = {
+    "type": "FeatureCollection",
+    "features": [ 
+    {"type": "Feature",
+      "properties": firstsubset,
+      "geometry": {
+        "coordinates": coordinates,
+        "type": "Point"
+      }
+      },
+      {"type": "Feature",
+      	"properties": secondsubset,
+        "geometry": {
+         "coordinates": coordinates2,
+         "type": "Point" 
+         }
+      }
+      ]
+      }
+// test 
+
+
+map.getSource('Livestock_Location').setData(newset);
+
+        }, 2000);
+
+        map.addSource('Livestock_Location', { type: 'geojson', data: basedataset});
+        map.addLayer({
+            'id': 'ArrayofLivestock',
+            'type': 'symbol',
+            'source': 'Livestock_Location',
+            'layout': {
+                'icon-image': 'zoo-15'
+            }
+        });
+    });
+       
+ map.on('click', 'Livestock_Location', (e) => {
+
+
+      // Set variables equal to the current feature's magnitude, location, and time
+      var features = map.queryRenderedFeatures(e.point, {
+    layers: ['Livestock_Location']
+    }); 
+    var feature = features[0];
+    
+      var ID = feature.properties.ID 
+      var Dosage = feature.properties.MedicineA 
+     
+
+      // Check whether features exist
+      if (e.features.length > 0) {
+        // Display the magnitude, location, and time in the sidebar
+        IDDisplay.textContent = ID;
+        // Conditional for button visibility 
+        DosageDisplay.textContent = Dosage;
+        if (Dosage == "Yes") {
+        document.getElementById("Adminster").disabled = true;
+        }else {
+        document.getElementById("Adminster").disabled = false;
+}
+        
+      
+}
+});
+
+// Updates property using UI button 
+function ShowDosage() {
+ var id = document.getElementById('ID').textContent;
+if (id == "1") {
+ N1 = "Yes";
+}
+if (id == "2") {
+
+ N2 = "Yes";
+
+}
+
+
+ }
+
