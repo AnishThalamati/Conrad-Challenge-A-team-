@@ -4,10 +4,13 @@
 <div class='LivestockInfo'>
   <div><strong>ID:</strong> <span id='ID'></span></div>
   <div><strong>Dosage:</strong> <span id='Dosage'></span></div>
+   <div><strong>Last Adminstration Date:</strong> <span id='Date'></span></div>
+   <div><strong>Next Adminstration Date:</strong> <span id='NewDate'></span></div>
   <div class = 'button'>
-  <button  id="Adminster" onclick="ShowDosage()">Adminster Dosage</button>
+  <button id="Adminster" onclick="ShowDosage()">Adminster Dosage</button>
+  <div>
   </div>
-</div>
+  <button id = "Manual Refresh" onclick = "ManualRefresh()">Refresh</button>
 
 //CSS
 body { margin: 0; padding: 0; }
@@ -17,8 +20,10 @@ body { margin: 0; padding: 0; }
   border: none;
   color: white;
   font-size: 14px;
+  border-radius: 12px;
+  
+  
 }
-
 
 .LivestockInfo {
   position: absolute;
@@ -31,9 +36,8 @@ body { margin: 0; padding: 0; }
   font-size: 14px;
   color: #222;
   background-color: #fff;
-  border-radius: 3px;
-} 
-
+  border-radius: 12px;
+}
 
 
 //JS 
@@ -41,22 +45,56 @@ body { margin: 0; padding: 0; }
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/anishthalamati/ckj0x4br310oc1arqbq97vtso',
-        zoom: 8, 
+        zoom: 8,
         center: [-87.6375, 41.9409]
     });
-     var IDDisplay = document.getElementById('ID');
+    // Scroll Wheel disable function 
+    map.scrollZoom.disable();
+    
+    // Sidebar display variable 
+    var NextDateDisplay = document.getElementById('NewDate')
+    var IDDisplay = document.getElementById('ID');
     var DosageDisplay = document.getElementById('Dosage');
+    var DateDisplay = document.getElementById('Date')
+    
+    // Initializes the coordinates for the two cows 
     var xc = -87.637596;
     var yc = 41.940403;
     var xc2 = -87.837596;
     var yc2 = 41.940403;
+    
+    //Current date updates last admin date 
+    var today = new Date();
+    // Next admin date calculated to occur 3 months later 
+    var today1 = new Date()
+		var dd = String(today.getDate()).padStart(2, '0');
+		var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+		var yyyy = today.getFullYear();
+    var mm1 = String(today.getMonth() + 4).padStart(2, '0');
+		today = mm + '/' + dd + '/' + yyyy;
+    today1 = mm1 + '/' + dd + '/' + yyyy;
+    
+    var i = 0; 
+    
+    //Current 
+		var N1 = "No";
+		var N2 = "No";
+		var N3 = '11/18/20'
+		var N4 = '11/16/20'
+		var N5 = '2/16/21'
+		var N6 = '2/18/21'
+
     var basedataset =  {
     "type": "FeatureCollection",
     "features": [ 
     {"type": "Feature",
       "properties": {
         "ID": "1",
-        "MedicineA": "Yes"
+        "MedicineA": "No",
+        "LastRecievedDosage": '11/18/20',
+        "NextDosage": N5
+        
+       
       },
       "geometry": {
         "coordinates": [-87.637596,41.940403],
@@ -67,7 +105,8 @@ body { margin: 0; padding: 0; }
       	"properties": {
         	"ID": "2",
           "MedicineA": "No",
-          'marker-color': '#3bb2d0'
+          "LastRecievedDosage": '11/16/20',
+          "NextDosage": N5
           
         },
         "geometry": {
@@ -77,23 +116,118 @@ body { margin: 0; padding: 0; }
       }
       ]
       }
-      var dataset1 = {"geometry": {"type": "Point", "coordinates": [80.22125848646738, 21.397998608210607]}, "type": "Feature", "properties": {}}
 var i = 0; 
 var N1 = "No";
 var N2 = "No";
-        
+var N3 = '11/18/20'
+var N4 = '11/16/20'
+var N5 = '2/16/21'
+var N6 = '2/18/21'
+
+if (N1 == "No"){
+var marker = new mapboxgl.Marker({color:"#FF0000"})
+.setLngLat([-87.637596,41.940403])
+.addTo(map);
+}
+if (N2 == "No"){
+var marker2 = new mapboxgl.Marker({color:"#FF0000"})
+.setLngLat([-87.837596,41.940403])
+.addTo(map);
+}
+
     
 
  map.on('load', function () {
  				
         window.setInterval(function () {
+        Refresh()
+        },
         
+        2000);
+
+        map.addSource('drone', { type: 'geojson', data: basedataset});
+        map.addLayer({
+            'id': 'drone',
+            'type': 'symbol',
+            'source': 'drone',
+            'layout': {
+                'icon-image': 'zoo-15'
+            }
+        });
+    });
+       
+ map.on('click', 'drone', (e) => {
+
+
+      // Set variables equal to the current feature's magnitude, location, and time
+      var features = map.queryRenderedFeatures(e.point, {
+    layers: ['drone']
+    }); 
+    var feature = features[0];
+    
+      var ID = feature.properties.ID 
+      var Dosage = feature.properties.MedicineA 
+      var Date = feature.properties.LastRecievedDosage
+      var Newdate = feature.properties.NextDosage
+      
+     
+
+      // Check whether features exist
+      if (e.features.length > 0) {
+        // Display the magnitude, location, and time in the sidebar
+        IDDisplay.textContent = ID;
+        DosageDisplay.textContent = Dosage;
+        DateDisplay.textContent = Date; 
+        NextDateDisplay.textContent = Newdate;
+        if (Dosage == "Yes") {
+        document.getElementById("Adminster").disabled = true;
+        }else {
+        document.getElementById("Adminster").disabled = false;
+}
+        
+      
+}
+});
+
+// 
+function ShowDosage() {
+ var id = document.getElementById('ID').textContent;
+if (id == "1") {
+ N1 = "Yes";
+ N3 = today;
+ N6 = today1;
  
-        
-        
+}
+if (id == "2") {
+
+ N2 = "Yes";
+ N4 = today; 
+ N5 = today1
+
+}
+
+
+ }
+ function ManualRefresh() {
+ Refresh()
+ 
+ 
+ }
+
+ 
+ function Refresh () {
+ if (i >=0) {
+       marker.remove();
+       marker2.remove();
+       }
+    
+                
         
        	 	var coordinates = [  xc , yc  ];
           var coordinates2 = [  xc2 , yc2 ];
+
+    
+     
           
      if (i%2 == 0) {
         xc = xc + 0.01 
@@ -105,12 +239,17 @@ var N2 = "No";
         
         var firstsubset = {
         "ID": "1",
-        "MedicineA": N1
+        "MedicineA": N1,
+        "LastRecievedDosage": N3,
+        "NextDosage": N6
+        
       }
         var secondsubset =
         {
         	"ID": "2",
-          "MedicineA": N2
+          "MedicineA": N2,
+          "LastRecievedDosage": N4,
+          "NextDosage": N5
         }
  
         	var newset = {
@@ -132,65 +271,38 @@ var N2 = "No";
       }
       ]
       }
-// test 
+ 
 
-
-map.getSource('Livestock_Location').setData(newset);
-
-        }, 2000);
-
-        map.addSource('Livestock_Location', { type: 'geojson', data: basedataset});
-        map.addLayer({
-            'id': 'ArrayofLivestock',
-            'type': 'symbol',
-            'source': 'Livestock_Location',
-            'layout': {
-                'icon-image': 'zoo-15'
-            }
-        });
-    });
-       
- map.on('click', 'Livestock_Location', (e) => {
-
-
-      // Set variables equal to the current feature's magnitude, location, and time
-      var features = map.queryRenderedFeatures(e.point, {
-    layers: ['Livestock_Location']
-    }); 
-    var feature = features[0];
-    
-      var ID = feature.properties.ID 
-      var Dosage = feature.properties.MedicineA 
-     
-
-      // Check whether features exist
-      if (e.features.length > 0) {
-        // Display the magnitude, location, and time in the sidebar
-        IDDisplay.textContent = ID;
-        // Conditional for button visibility 
-        DosageDisplay.textContent = Dosage;
-        if (Dosage == "Yes") {
-        document.getElementById("Adminster").disabled = true;
-        }else {
-        document.getElementById("Adminster").disabled = false;
+if (N1 == "No"){
+marker = new mapboxgl.Marker({color:"#FF0000"})
+.setLngLat(coordinates)
+.addTo(map);
 }
-        
-      
+
+if (N2 == "No") {
+marker2 = new mapboxgl.Marker({color:"#FF0000"})
+.setLngLat(coordinates2)
+.addTo(map);
 }
+
+if (today == N5) {
+N2 = "No"
+}
+if (today == N6) {
+N2 = "Np"
+}
+
+
+
+map.getSource('drone').setData(newset);
+
+i = i+1;
+map.flyTo({
+center: [xc,yc]
 });
 
-// Updates property using UI button 
-function ShowDosage() {
- var id = document.getElementById('ID').textContent;
-if (id == "1") {
- N1 = "Yes";
-}
-if (id == "2") {
-
- N2 = "Yes";
-
-}
-
-
+ 
  }
+
+
 
