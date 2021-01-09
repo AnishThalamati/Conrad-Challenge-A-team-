@@ -1,0 +1,88 @@
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+  	<title>Probacco</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+		
+		<div class="wrapper d-flex align-items-stretch">
+			<nav id="sidebar" class="active">
+				<div class="custom-menu">
+					<button type="button" id="sidebarCollapse" class="btn btn-primary">
+	          <i class="fa fa-bars"></i>
+	          <span class="sr-only">Toggle Menu</span>
+	        </button>
+        </div>
+				<div class="p-4">
+		  		<h1><a href="index.html" class="logo">Probacco</a></h1>
+	        <ul class="list-unstyled components mb-5">
+	          <li class="active">
+	            <a href="#"><span class="fa fa-home mr-3"></span> Home</a>
+	          </li>
+	          <li>
+	              <a href="#"><span class="fa fa-user mr-3"></span> My profile </a>
+	          </li>
+	          <li>
+	          <a href = "#">
+              <span class="fa fa-briefcase mr-3"></span><span onclick= "Myfarm()";> My Farm</span> 
+	          </li>
+	          <li>
+              
+              	<span class="fa fa-sticky-note mr-3"></span> Farm Analytics</a>
+	          </li>
+	          <li>
+              <a href="#"><span class="fa fa-paper-plane mr-3"></span> Log Out </a>
+	          </li>
+	        </ul>
+
+	        <div class="mb-5">
+						<h3 class="h6 mb-3">Contact Us</h3>
+						<form action="#" class="subscribe-form">
+	            <div class="form-group d-flex">
+	            	<div class="icon"><span class="icon-paper-plane"></span></div>
+	              <input type="text" class="form-control" placeholder="Enter Email Address">
+	            </div>
+	          </form>
+					</div>
+
+	        <div class="footer">
+	        	<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved to Probacco Inc.
+						  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+	        </div>
+
+	      </div>
+    	</nav>
+
+        <!-- Page Content  -->
+      <div id="content" class="p-4 p-md-5 pt-5">
+        <h2 class="mb-4">Welcome to Probacco</h2>
+        <p>Our Revolutionary product helps you keep your livestock safe</p>
+        <p>Team Probacco is composed of Anish Thalamati, Aaryan Shukla, Shray Kudva, Varun Sunkavalli, and Sanjit Shirol.  Aaryan Shukla and Anish Thalamati led the creation of an application that allows us to track the dosage of individual animals, and created the framework for the final product. Varun Sunkavalli focused on the creation of the nutritious pill, made of tobacco protein and tobacco specific alkaloids, which would act as the replacement to injections on farms that could be virtually tracked. Shray Kudva and Sanjit Shirol led the business aspect of the company and did extensive research for the real world application of the product.  The team came together in late August, when we decided to come up with an idea to better the failing tobacco industries around the world and create a better use for tobacco. To start, we spent around a week researching the vast uses of tobacco for many fields, and eventually decided to create a product that would pertain to the widespread issues of livestock organization on farms and unnecessary injections.</p>
+      </div>
+		</div>
+
+
+	<script> 
+	function Myfarm(){
+		window.open("file:///C:/Users/anish/Downloads/bootstrap-sidebar-03/sidebar-03/Myfarm.html", "_self");
+
+
+	}
+	</script>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
