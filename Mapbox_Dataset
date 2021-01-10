@@ -63,7 +63,7 @@
         "MedicineA": "N"
       },
       "geometry": {
-        "coordinates": [37.37072168476464, -121.79717227380367],
+        "coordinates": [-87.939775, 42.883683],
         "type": "Point"
       }
     },
@@ -74,7 +74,7 @@
         "MedicineA": "N"
       },
       "geometry": {
-        "coordinates": [37.37072168476464, -121.79717227380367],
+        "coordinates": [-87.869775, 42.883683],
         "type": "Point"
       }
     },
@@ -85,7 +85,7 @@
         "MedicineA": "N"
       },
       "geometry": {
-        "coordinates": [37.27072168476464, -121.79717227380367],
+        "coordinates": [-87.769775, 42.893683],
         "type": "Point"
       }
     },
@@ -96,7 +96,7 @@
         "MedicineA": "N"
       },
       "geometry": {
-        "coordinates": [37.37072168476464, -121.79717227380367],
+        "coordinates": [-87.769775, 42.883683,
         "type": "Point"
       }
     },
@@ -107,7 +107,7 @@
         "MedicineA": "N"
       },
       "geometry": {
-        "coordinates": [37.36072168476464, -120.79717227380367],
+        "coordinates": [-87.769775, 42.873683],
         "type": "Point"
       }
     },
@@ -118,7 +118,7 @@
         "MedicineA": "N"
       },
       "geometry": {
-        "coordinates": [37.35072168476464, -120.79717227380367],
+        "coordinates": [-87.789775, 41.873683],
         "type": "Point"
       }
     },
@@ -129,7 +129,7 @@
         "MedicineA": "N"
       },
       "geometry": {
-        "coordinates": [37.34072168476464, -120.79717227380367],
+        "coordinates": [-87.749775, 41.873683],
         "type": "Point"
       }
     },
@@ -140,7 +140,7 @@
         "MedicineA": "N"
       },
       "geometry": {
-        "coordinates": [37.33072168476464, -120.79717227380367],
+        "coordinates": [-87.759775, 41.873683],
         "type": "Point"
       }
     },
