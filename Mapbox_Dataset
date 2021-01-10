@@ -55,6 +55,7 @@
         "type": "Point"
       }
     },
+    
      {
       "type": "Feature",
       "properties": {
@@ -62,7 +63,84 @@
         "MedicineA": "N"
       },
       "geometry": {
-        "coordinates": [-87.923735, 41.629985],
+        "coordinates": [37.37072168476464, -121.79717227380367],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "6",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [37.37072168476464, -121.79717227380367],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "7",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [37.27072168476464, -121.79717227380367],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "8",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [37.37072168476464, -121.79717227380367],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "9",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [37.36072168476464, -120.79717227380367],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ID": "10",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [37.35072168476464, -120.79717227380367],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ID": "11",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [37.34072168476464, -120.79717227380367],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "12",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [37.33072168476464, -120.79717227380367],
         "type": "Point"
       }
     },
