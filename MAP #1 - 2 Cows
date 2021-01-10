@@ -1,34 +1,27 @@
-//HTML 
-<div id="map"></div>
 
-<div class='LivestockInfo'>
-  <div><strong>ID:</strong> <span id='ID'></span></div>
-  <div><strong>Dosage:</strong> <span id='Dosage'></span></div>
-   <div><strong>Last Adminstration Date:</strong> <span id='Date'></span></div>
-   <div><strong>Next Adminstration Date:</strong> <span id='NewDate'></span></div>
-  <div class = 'button'>
-  <button id="Adminster" onclick="ShowDosage()">Adminster Dosage</button>
-  <div>
-  </div>
-  <button id = "Manual Refresh" onclick = "ManualRefresh()">Refresh</button>
-
-//CSS
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>My Farm</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css" rel="stylesheet" />
+<style>
 body { margin: 0; padding: 0; }
   #map { position: absolute; top: 0; bottom: 0; width: 100%; }
   
-  .button {
+.button {
   border: none;
   color: white;
   font-size: 14px;
-  border-radius: 12px;
-  
-  
+  border-radius: 12px;  
 }
 
 .LivestockInfo {
   position: absolute;
   font-family: sans-serif;
-  margin-top: 5px;
+  margin-top: 0px;
   margin-left: 5px;
   padding: 5px;
   width: 30%;
@@ -39,8 +32,71 @@ body { margin: 0; padding: 0; }
   border-radius: 12px;
 }
 
+.DosageCalculator {
+  position: sticky;
+  font-family: sans-serif;
+  margin-top: -130px;
+  margin-left: 1100px;
+  padding: 5px;
+  width: 70%;
+  border: 2px solid black;
+  font-size: 14px;
+  color: #222;
+  background-color: #fff;
+  border-radius: 12px;
+  
+  
+}
+</style>
 
-//JS 
+</head>
+<body>
+<div id="map"></div>
+
+<div class='LivestockInfo'>
+  <div><strong>ID:</strong> <span id='ID'></span></div>
+  <div><strong>Dosage:</strong> <span id='Dosage'></span></div>
+   <div><strong>Last Adminstration Date:</strong> <span id='Date'></span></div>
+   <div><strong>Next Adminstration Date:</strong> <span id='NewDate'></span></div>
+   <div><strong>Dosage Amount:</strong> <span id='DosageAmount'></span></div>
+   
+  <div class = 'button'>
+    <button id="Adminster" onclick="ShowDosage()">Adminster Dosage</button><br>
+    <button id = "Manual Refresh" onclick = "ManualRefresh()">Refresh</button>
+  </div>
+  
+ <div class = 'DosageCalculator'>
+ <form>
+  <div><strong>Calculate Dosage:</strong> <span id='dosage_calculate'></span></div>
+ <label for="animals">Choose a Animal:</label>
+  <select name="animals" id="animals">
+      <option value="Horse">Horse</option>
+      <option value="Cattle">Cattle</option>
+      <option value="Sheep">Sheep</option>
+      </select>
+  <br>
+   <div><strong>Weight of Animal(kg):</strong> <span id='WeightofAnimal'></span></div>
+  <input type="text" id="weight" name="weight"><br>
+   <div><strong>Severity of Infection:</strong> <span id='infection'></span></div>
+    <label for="animals">Choose a Animal:</label>
+  <select name="infection1" id="infection1">
+      <option value="low">low</option>
+      <option value="medium">medium</option>
+      <option value="high">high</option>
+      </select>
+</form>
+<button id="Calculate" onclick="CalculateDosage()">Calculate Dosage</button>
+
+ </div>
+  
+
+  </div>
+
+
+
+ 
+<script>
+
  mapboxgl.accessToken = 'pk.eyJ1IjoiYW5pc2h0aGFsYW1hdGkiLCJhIjoiY2tqMGppdWV1MGJybTJ4bGphdmM5c2RtMyJ9.ppWpEl7sE8gjJdgsTd0asw';
     var map = new mapboxgl.Map({
         container: 'map',
@@ -48,41 +104,185 @@ body { margin: 0; padding: 0; }
         zoom: 8,
         center: [-87.6375, 41.9409]
     });
-    // Scroll Wheel disable function 
-    map.scrollZoom.disable();
+
+
+    map.on('load', function () {
+  map.addSource('mapbox-dem', {
+  'type': 'raster-dem',
+  'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+  'tileSize': 512,
+  'maxzoom': 14
+  });
+// add the DEM source as a terrain layer with exaggerated height
+  map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+ 
+// add a sky layer that will show when the map is highly pitched
+  map.addLayer({
+  'id': 'sky',
+  'type': 'sky',
+  'paint': {
+  'sky-type': 'atmosphere',
+  'sky-atmosphere-sun': [0.0, 0.0],
+  'sky-atmosphere-sun-intensity': 15
+}
+});
+});
     
-    // Sidebar display variable 
+    var dosageamountDisplay = document.getElementById('dosageamount')
     var NextDateDisplay = document.getElementById('NewDate')
-    var IDDisplay = document.getElementById('ID');
+     var IDDisplay = document.getElementById('ID');
     var DosageDisplay = document.getElementById('Dosage');
     var DateDisplay = document.getElementById('Date')
-    
-    // Initializes the coordinates for the two cows 
     var xc = -87.637596;
     var yc = 41.940403;
     var xc2 = -87.837596;
     var yc2 = 41.940403;
-    
-    //Current date updates last admin date 
     var today = new Date();
-    // Next admin date calculated to occur 3 months later 
     var today1 = new Date()
-		var dd = String(today.getDate()).padStart(2, '0');
-		var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-		var yyyy = today.getFullYear();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
     var mm1 = String(today.getMonth() + 4).padStart(2, '0');
-		today = mm + '/' + dd + '/' + yyyy;
+    today = mm + '/' + dd + '/' + yyyy;
     today1 = mm1 + '/' + dd + '/' + yyyy;
-    
     var i = 0; 
+    var N1 = "No";
+    var N2 = "No";
+    var N3 = '11/18/20'
+    var N4 = '11/16/20'
+    var N5 = '2/16/21'
+    var N6 = '2/18/21'
+
+    var externalset =
+    {
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "ID": "1",
+        "MedicineA": "Y"
+      },
+      "geometry": {
+        "coordinates": [-87.637596, 41.940403],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ID": "2",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [-87.603735, 41.829985],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ID": "3",
+        "MedicineA": "Y"
+      },
+      "geometry": {
+        "coordinates": [-87.769775, 41.873683],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "4",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [-87.803735, 41.899985],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "5",
+        "MedicineA": "Y"
+      },
+      "geometry": {
+        "coordinates": [-87.903735, 41.929985],
+        "type": "Point"
+      }
+    },
     
-    //Current 
-		var N1 = "No";
-		var N2 = "No";
-		var N3 = '11/18/20'
-		var N4 = '11/16/20'
-		var N5 = '2/16/21'
-		var N6 = '2/18/21'
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "6",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [-87.939775, 42.883683],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "6",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [-87.869775, 42.883683],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "7",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [-87.769775, 42.893683],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ID": "10",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [-87.789775, 41.873683],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ID": "11",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [-87.749775, 41.873683],
+        "type": "Point"
+      }
+    },
+     {
+      "type": "Feature",
+      "properties": {
+        "ID": "12",
+        "MedicineA": "N"
+      },
+      "geometry": {
+        "coordinates": [-87.759775, 41.873683],
+        "type": "Point"
+      }
+    },
+  ],
+  "type": "FeatureCollection"
+}
+    
+    
 
     var basedataset =  {
     "type": "FeatureCollection",
@@ -102,8 +302,8 @@ body { margin: 0; padding: 0; }
       }
       },
       {"type": "Feature",
-      	"properties": {
-        	"ID": "2",
+        "properties": {
+          "ID": "2",
           "MedicineA": "No",
           "LastRecievedDosage": '11/16/20',
           "NextDosage": N5
@@ -138,7 +338,7 @@ var marker2 = new mapboxgl.Marker({color:"#FF0000"})
     
 
  map.on('load', function () {
- 				
+        
         window.setInterval(function () {
         Refresh()
         },
@@ -154,7 +354,17 @@ var marker2 = new mapboxgl.Marker({color:"#FF0000"})
                 'icon-image': 'zoo-15'
             }
         });
+        map.addSource('drone1', { type: 'geojson', data: externalset});
+        map.addLayer({
+            'id': 'drone1',
+            'type': 'symbol',
+            'source': 'drone1',
+            'layout': {
+                'icon-image': 'zoo-15'
+            }
+        });
     });
+
        
  map.on('click', 'drone', (e) => {
 
@@ -223,7 +433,7 @@ if (id == "2") {
     
                 
         
-       	 	var coordinates = [  xc , yc  ];
+          var coordinates = [  xc , yc  ];
           var coordinates2 = [  xc2 , yc2 ];
 
     
@@ -246,13 +456,15 @@ if (id == "2") {
       }
         var secondsubset =
         {
-        	"ID": "2",
+          "ID": "2",
           "MedicineA": N2,
           "LastRecievedDosage": N4,
           "NextDosage": N5
         }
- 
-        	var newset = {
+ // Premade set to include 20 cows
+
+
+          var newset = {
     "type": "FeatureCollection",
     "features": [ 
     {"type": "Feature",
@@ -263,7 +475,7 @@ if (id == "2") {
       }
       },
       {"type": "Feature",
-      	"properties": secondsubset,
+        "properties": secondsubset,
         "geometry": {
          "coordinates": coordinates2,
          "type": "Point" 
@@ -271,7 +483,7 @@ if (id == "2") {
       }
       ]
       }
- 
+// test 
 
 if (N1 == "No"){
 marker = new mapboxgl.Marker({color:"#FF0000"})
@@ -289,7 +501,7 @@ if (today == N5) {
 N2 = "No"
 }
 if (today == N6) {
-N2 = "Np"
+N2 = "No"
 }
 
 
@@ -297,12 +509,38 @@ N2 = "Np"
 map.getSource('drone').setData(newset);
 
 i = i+1;
-map.flyTo({
-center: [xc,yc]
-});
 
+}
+function CalculateDosage() {
+var amount; 
+var animal = document.getElementById("animals").value;
+var weight = document.getElementById("weight").value;
+
+var subamount = 7.5*weight*1000
+var severity = document.getElementById('sevevrity')
+
+if (severity == "low"){
+amount = subamount*1.1
+}
+if (severity == "medium"){
+amount = subamount *1.3
+
+}
+if (severity == "high"){
+amount = subamount * 1.6
+}
+
+
+dosageamountDisplay.textContent = amount 
+
+
+
+}
+
+
+
+</script>
  
- }
 
-
-
+</body>
+</html>
